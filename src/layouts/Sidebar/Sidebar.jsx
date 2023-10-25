@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { FaBars, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
-import { BiAnalyse, BiSearch } from "react-icons/bi";
+import { BiAnalyse, BiRadioCircleMarked, BiSearch } from "react-icons/bi";
 import { BiCog } from "react-icons/bi";
 import { AiFillHeart, AiTwotoneFileExclamation } from "react-icons/ai";
-import { BsCartCheck } from "react-icons/bs";
+import { BsCartCheck, BsCartFill } from "react-icons/bs";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SidebarMenu from "./SidebarMenu";
@@ -14,6 +14,64 @@ const routes = [
     path: "/",
     name: "Dashboard",
     icon: <FaHome />,
+  },
+  {
+    path: "/products",
+    name: "Products",
+    icon: <BsCartFill />,
+    subRoutes: [
+      {
+        path: "/products/all",
+        name: "All Products",
+        icon: <BiRadioCircleMarked />,
+      },
+      {
+        path: "/categories",
+        name: "Categories",
+        icon: <BiRadioCircleMarked />,
+      },
+      {
+        path: "/sub-categories",
+        name: "Sub-Categories",
+        icon: <BiRadioCircleMarked />,
+      },
+      {
+        path: "/brands",
+        name: "brands",
+        icon: <BiRadioCircleMarked />,
+      },
+      {
+        path: "/metals",
+        name: "Metals",
+        icon: <BiRadioCircleMarked />,
+      },
+      {
+        path: "/occassions",
+        name: "Occassions",
+        icon: <BiRadioCircleMarked />,
+      },
+      {
+        path: "/designs",
+        name: "Designs",
+        icon: <BiRadioCircleMarked />,
+      },
+
+      // {
+      //   path: "/settings/profile",
+      //   name: "Profile ",
+      //   icon: <FaUser />,
+      // },
+      // {
+      //   path: "/settings/2fa",
+      //   name: "2FA",
+      //   icon: <FaLock />,
+      // },
+      // {
+      //   path: "/settings/billing",
+      //   name: "Billing",
+      //   icon: <FaMoneyBill />,
+      // },
+    ],
   },
   {
     path: "/users",
@@ -30,28 +88,7 @@ const routes = [
     name: "Analytics",
     icon: <BiAnalyse />,
   },
-  {
-    path: "/file-manager",
-    name: "File Manager",
-    icon: <AiTwotoneFileExclamation />,
-    subRoutes: [
-      {
-        path: "/settings/profile",
-        name: "Profile ",
-        icon: <FaUser />,
-      },
-      {
-        path: "/settings/2fa",
-        name: "2FA",
-        icon: <FaLock />,
-      },
-      {
-        path: "/settings/billing",
-        name: "Billing",
-        icon: <FaMoneyBill />,
-      },
-    ],
-  },
+
   {
     path: "/order",
     name: "Order",
@@ -184,6 +221,7 @@ const SideBar = ({ children }) => {
                     route={route}
                     showAnimation={showAnimation}
                     isOpen={isOpen}
+                    key={index}
                   />
                 );
               }
@@ -193,7 +231,7 @@ const SideBar = ({ children }) => {
                   to={route.path}
                   key={index}
                   className="link"
-                  activeClassName="active"
+                  // activeClassName="active"
                 >
                   <div className="icon">{route.icon}</div>
                   <AnimatePresence>
