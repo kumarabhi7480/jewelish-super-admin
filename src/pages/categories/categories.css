@@ -1,0 +1,38 @@
+.modalBtnStyle{
+    background: #04395e!important;
+    color: white!important;
+    margin-bottom: 1rem!important;
+}
+
+.categorieSubmitBtn{
+    background: #04395e!important;
+    color: white!important;
+    margin-bottom: 1rem!important;
+}
+
+.error{
+    color: red;
+}
+
+/* modal css  */
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+    margin: 0px!important;
+    max-width: 350px!important;
+}
+
+
+.css-mhc70k-MuiGrid-root>.MuiGrid-item{
+    /* padding-left: 0px!important; */
+    /* padding-top: 0px!important; */
+}
+
+.css-1t4vnk2-MuiDialogContent-root{
+    padding: 1rem!important;
+}
+/* .css-1295yaz-MuiGrid-root{
+    margin-left: 0px!important;
+} */
+.css-153eyq5-MuiModal-root-MuiDialog-root .MuiDialogContent-root {
+    /* padding: 1rem!important; */
+}
