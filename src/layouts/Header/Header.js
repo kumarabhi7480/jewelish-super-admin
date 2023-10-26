@@ -45,12 +45,13 @@ const Header = () => {
                 </li>
                 <hr className="hr" />
                 <li className="user_list_style">
-                  <NavLink onClick={handleLogout}>
+                  <NavLink to="" onClick={handleLogout}>
                     <BiLogOutCircle className="user_list_icon" /> Log Out
                   </NavLink>
                 </li>
               </ul>
             )}
+
           </div>
         </div>
       </header>
