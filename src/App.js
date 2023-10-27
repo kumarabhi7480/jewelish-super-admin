@@ -12,6 +12,7 @@ import Setting from "./pages/Setting";
 import SideBar from "./layouts/Sidebar/Sidebar";
 import PrivateRoute from "./utils/PrivateRoute";
 import Categories from "./pages/categories/Categories";
+import Login from "./pages/login/Login";
 function App() {
   return (
     <Router>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/settings" element={<Setting />} />
           <Route path="*" element={<> not found</>} />
           </Route>
+          <Route path="/login" element={<Login />}  />
         </Routes>
       {/* </SideBar> */}
     </Router>
