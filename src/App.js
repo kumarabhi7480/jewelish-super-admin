@@ -17,7 +17,7 @@ function App() {
   return (
     <Router>
       {/* <SideBar /> */}
-        <Routes>
+      <Routes>
         <Route path="/" exact element={<PrivateRoute />}>
           <Route index element={<Dashboard />} />
           <Route path="/categories" element={<Categories />} />
@@ -29,9 +29,9 @@ function App() {
           <Route path="/saved" element={<Saved />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="*" element={<> not found</>} />
-          </Route>
-          <Route path="/login" element={<Login />}  />
-        </Routes>
+        </Route>
+        <Route path="/login" element={<Login />} />
+      </Routes>
       {/* </SideBar> */}
     </Router>
   );
