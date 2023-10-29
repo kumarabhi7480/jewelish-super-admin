@@ -13,6 +13,7 @@ import SideBar from "./layouts/Sidebar/Sidebar";
 import PrivateRoute from "./utils/PrivateRoute";
 import Categories from "./pages/categories/Categories";
 import Login from "./pages/login/Login";
+
 function App() {
   return (
     <Router>
