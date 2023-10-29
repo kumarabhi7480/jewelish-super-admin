@@ -9,12 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { login } from "../../redux/Actions/Auth";
 import { useDispatch } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,6 +26,8 @@ const Login = () => {
     event.preventDefault();
   };
     const dispatch = useDispatch()
+    const {isLoading, success: isSuccess} = useSelector(state=>state.auth);
+    const navigate = useNavigate();
   const loginValidationSchema = Yup.object().shape({
     email: Yup.string().email().required("Please enter email"),
     password: Yup.string().required("Please enter password"),
@@ -37,9 +40,20 @@ const Login = () => {
     validationSchema: loginValidationSchema,
     onSubmit: async (values) => {
       // console.log(values);
-      dispatch(login(values));
+      try{
+        dispatch(login(values));
+      }catch(error){
+
+      }
     },
   });
+  useEffect(() => {
+    if (isSuccess) {
+      // toast.success("Logdin Successfully");
+      alert("Successfully logdin");
+      navigate("/");
+    }
+  }, [isSuccess]);
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
@@ -125,6 +139,7 @@ const Login = () => {
           </Grid>
         </Grid>
       </form>
+      <Toaster />
     </>
   );
 };
