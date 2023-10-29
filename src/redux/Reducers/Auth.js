@@ -5,6 +5,7 @@ const initialValues={
     user: null,
     error:null,
     successMessage: null,
+    isLogdin:false,
 };
 
 export const authReducer = createReducer(initialValues,{
@@ -16,10 +17,12 @@ export const authReducer = createReducer(initialValues,{
     loginSuccess: (state)=>{
         state.loading= false;
         state.isAuthenticated=true;
+        state.isLogdin=true;
+        state.success=true;
     },
-    // loginFail: (state)=>{
-    //     state.loading=false;
-    //     state.isAuthenticated=false;
-    //     state.error= action.payload;
-    // }
+    loginFail: (state,action)=>{
+        state.loading=false;
+        state.isAuthenticated=false;
+        state.error= action.payload;
+    }
 })
