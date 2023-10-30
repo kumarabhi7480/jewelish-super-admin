@@ -10,9 +10,10 @@ const initialValues={
 
 export const authReducer = createReducer(initialValues,{
     // Login form action
-    loginRequest: (state)=>{
+    loginRequest: (state,action)=>{
         state.loading= true;
         state.isAuthenticated= false;
+        state.error=action.payload;
     },
     loginSuccess: (state)=>{
         state.loading= false;
@@ -24,5 +25,19 @@ export const authReducer = createReducer(initialValues,{
         state.loading=false;
         state.isAuthenticated=false;
         state.error= action.payload;
+    },
+    logoutRequest: (state)=>{
+        state.loading = true;
+    },
+    logoutSuccess: (state)=>{
+        state.loading = false;
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
+        state.isAuthenticated = false;
+        state.user = null;
+    },
+    logoutFail: (state)=> {
+        state.loading = false;
+        state.isAuthenticated = true;
     }
 })
