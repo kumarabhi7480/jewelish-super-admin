@@ -21,4 +21,16 @@ export const login =  ({email,password})=> async(dispatch)=>{
         console.log(error.message);
     }
 }
-   
+  
+export const logout = ()=>async (dispatch)=>{
+    try{
+        dispatch({type: "logoutRequest"});
+        localStorage.removeItem("authToken");
+        dispatch({type: "logoutSuccess"});
+    }catch(error){
+      dispatch({
+        type: "logoutFail",
+        payload: error.response.data.message,
+      })
+    }
+}
