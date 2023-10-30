@@ -16,7 +16,7 @@ import * as Yup from "yup";
 import { login } from "../../redux/Actions/Auth";
 import { useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
-
+import Loading from "../../Components/loading/loading";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -26,7 +26,7 @@ const Login = () => {
     event.preventDefault();
   };
     const dispatch = useDispatch()
-    const {isLoading, success: isSuccess} = useSelector(state=>state.auth);
+    const {loading: isLoading, success: isSuccess} = useSelector(state=>state.auth);
     const navigate = useNavigate();
   const loginValidationSchema = Yup.object().shape({
     email: Yup.string().email().required("Please enter email"),
@@ -56,7 +56,8 @@ const Login = () => {
   }, [isSuccess]);
   return (
     <>
-      <form onSubmit={formik.handleSubmit}>
+     {isLoading ? <Loading /> : '' }
+     <form onSubmit={formik.handleSubmit}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
           <Grid
             style={{
