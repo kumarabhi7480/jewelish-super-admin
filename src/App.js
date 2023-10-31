@@ -13,6 +13,7 @@ import SideBar from "./layouts/Sidebar/Sidebar";
 import PrivateRoute from "./utils/PrivateRoute";
 import Categories from "./pages/categories/Categories";
 import Login from "./pages/login/Login";
+import ForGotPassword from "./pages/forGotPassword/ForGotPassword";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="*" element={<> not found</>} />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/password/forgot" element={<ForGotPassword />} />
       </Routes>
       {/* </SideBar> */}
     </Router>
