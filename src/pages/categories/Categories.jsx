@@ -19,7 +19,7 @@ import "./categories.css";
 import styled from "@emotion/styled";
 import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
-import { Field, Form, Formik, validateYupSchema } from "formik";
+import { ErrorMessage, Field, Form, Formik, validateYupSchema } from "formik";
 import * as Yup from "yup";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -88,38 +88,61 @@ const tableColumns = [
     filtering: false,
   },
 ];
-const categoryValidationSchema = Yup.object().shape({
-  name: Yup.string().required("Please enter Category"),
-  slug: Yup.string().required("Please enter Slug"),
-  // icon: removeImageRequiredValidation
-  // ? Yup.mixed().notRequired(): Yup.mixed()
-  // .required("Please select a icon")
-  // .test("fileType", "Unsupported file format", (value) => {
-  //   if (!value) return true; // No file selected is fine
-  //   return [
-  //     "image/jpeg",
-  //     "image/jpg",
-  //     "image/png",
-  //     "image/webp",
-  //   ].includes(value.type);
-  // }),
-  // thumbnail: removeImageRequiredValidation
-  //     ? Yup.mixed().notRequired():
-  //       Yup.mixed()
-  //         .required("Please select a thumbnail")
-  //         .test("fileType", "Unsupported file format", (value) => {
-  //           if (!value) return true; // No file selected is fine
-  //           return [
-  //             "image/jpeg",
-  //             "image/jpg",
-  //             "image/png",
-  //             "image/webp",
-  //           ].includes(value.type);
-  //         }),
-});
+const categoryValidationSchema = (removeImageRequiredValidation) => {
+  return Yup.object().shape({
+    name: Yup.string().required("Please enter category name"),
+    slug: Yup.string().required("Please enter slug"),
+    icon: removeImageRequiredValidation
+      ? Yup.mixed().notRequired()
+      : // .test("fileType", "Unsupported file format", (value) => {
+        //   if (!value) return true; // No file selected is fine
+        //   return [
+        //     "image/jpeg",
+        //     "image/jpg",
+        //     "image/png",
+        //     "image/webp",
+        //   ].includes(value.type);
+        // })
+        Yup.mixed()
+          .required("Please select a icon")
+          .test("fileType", "Unsupported file format", (value) => {
+            if (!value) return true; // No file selected is fine
+            return [
+              "image/jpeg",
+              "image/jpg",
+              "image/png",
+              "image/webp",
+            ].includes(value.type);
+          }),
+    thumbnail: removeImageRequiredValidation
+      ? Yup.mixed().notRequired()
+      : // .test("fileType", "Unsupported file format", (value) => {
+        //   if (!value) return true; // No file selected is fine
+        //   return [
+        //     "image/jpeg",
+        //     "image/jpg",
+        //     "image/png",
+        //     "image/webp",
+        //   ].includes(value.type);
+        // })
+        Yup.mixed()
+          .required("Please select a thumbnail")
+          .test("fileType", "Unsupported file format", (value) => {
+            if (!value) return true; // No file selected is fine
+            return [
+              "image/jpeg",
+              "image/jpg",
+              "image/png",
+              "image/webp",
+            ].includes(value.type);
+          }),
+  });
+};
 const Categories = () => {
   const [open, setOpen] = useState(false);
-
+  const [categoryIconPreview, setCategoryIconPreview] = useState(null);
+  const [categoryThumbnailPreview, setCategoryThumbnailPreview] =
+    useState(null);
   // const [validationSchema, setValidationSchema] = useState(
   //   categoryValidationSchema(false)
   // )
@@ -155,7 +178,7 @@ const Categories = () => {
             validationSchema={categoryValidationSchema}
             // onSubmit={handleSubmit}
           >
-            {({ errors, onChange, handleChange, touched, values }) => (
+            {({ setFieldValue, errors, onChange, handleChange, touched, values }) => (
               <Form>
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
                   Modal title
@@ -187,9 +210,17 @@ const Categories = () => {
                         label="Category"
                         fullWidth
                         name="name"
-                        // error={!!errors.name}
+                        error={!!errors.name}
                         onChange={(e) => {
                           handleChange(e);
+                          // Update the slug field value as well
+                          const newSlug = e.target.value
+                            .toLowerCase()
+                            .replace(/[^a-zA-Z0-9\s]/g, "") // Remove special characters
+                            .replace(/\s+/g, "-");
+                          handleChange({
+                            target: { name: "slug", value: newSlug },
+                          });
                         }}
                       />
                       {errors.name && touched.name ? (
@@ -199,12 +230,12 @@ const Categories = () => {
                     <Grid item xs={12} md={12}>
                       <Field
                         as={TextField}
-                        size="slug"
+                        size="small"
                         label="Slug"
                         fullWidth
-                        name="name"
+                        name="slug"
+                        error={!!errors.slug}
                         value={values.slug}
-                        // error={!!errors.name}
                         onChange={(e) => {
                           handleChange(e);
                         }}
@@ -213,6 +244,78 @@ const Categories = () => {
                         <small className="error">{errors.slug}</small>
                       ) : null}
                     </Grid>
+                    <Grid item xs={12} md={12}>
+                        <label className="pb-2" htmlFor="icon">
+                          Upload Icon
+                        </label>
+
+                        <Field
+                          type="file"
+                          id="icon"
+                          name="icon"
+                          error={!!errors.icon}
+                          value={undefined}
+                          onChange={(event) => {
+                            const file = event.currentTarget.files[0];
+                            setFieldValue("icon", file);
+                            setCategoryIconPreview(URL.createObjectURL(file)); // Set icon preview URL
+                          }}
+                        />
+                        <ErrorMessage
+                          name="icon"
+                          component="div"
+                          className="error"
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        {categoryIconPreview && (
+                          <div>
+                            <label>Image Preview:</label>
+                            <img
+                              src={categoryIconPreview}
+                              alt="Preview"
+                              style={{ maxWidth: "100%" }}
+                            />
+                          </div>
+                        )}
+                      </Grid>
+                      <Grid item xs={12} md={12}>
+                        <label className="pb-2" htmlFor="icon">
+                          Upload Thumbnail
+                        </label>
+
+                        <Field
+                          type="file"
+                          id="thumbnail"
+                          name="thumbnail"
+                          error={!!errors.thumbnail}
+                          value={undefined}
+                          onChange={(event) => {
+                            const file = event.currentTarget.files[0];
+                            setFieldValue("thumbnail", file);
+                            setCategoryThumbnailPreview(
+                              URL.createObjectURL(file)
+                            ); // Set thumbnail preview URL
+                          }}
+                        />
+                        <ErrorMessage
+                          name="thumbnail"
+                          component="div"
+                          className="error"
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        {categoryThumbnailPreview && (
+                          <div>
+                            <label>Image Preview:</label>
+                            <img
+                              src={categoryThumbnailPreview}
+                              alt="Preview"
+                              style={{ maxWidth: "100%" }}
+                            />
+                          </div>
+                        )}
+                      </Grid>
                   </Grid>
                 </DialogContent>
                 <DialogActions>
