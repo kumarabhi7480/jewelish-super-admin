@@ -9,6 +9,8 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SidebarMenu from "./SidebarMenu";
 import "./sideBar.css";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 const routes = [
   {
     path: "/",
@@ -125,8 +127,10 @@ const routes = [
 ];
 
 const SideBar = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => setIsOpen(!isOpen);
+  const dispatch = useDispatch()
+  const {isOpen} = useSelector((state)=>state.sidebar)
+  // const [isOpen, setIsOpen] = useState(false);
+  // const toggle = () => setIsOpen(!isOpen);
   const inputAnimation = {
     hidden: {
       width: 0,
@@ -192,12 +196,18 @@ const SideBar = ({ children }) => {
             </AnimatePresence>
 
             <div className="bars">
-              <FaBars onClick={toggle} />
+              {/* <FaBars onClick={toggle} /> */}
+              {/* <FaBars onClick={toggle} /> */}
             </div>
           </div>
           <div className="search">
             <div className="search_icon">
-              <BiSearch />
+              <BiSearch   onClick={() =>
+                dispatch({
+                  type: "setIsOpen",
+                  payload: true,
+                })
+              } />
             </div>
             <AnimatePresence>
               {isOpen && (
@@ -217,7 +227,7 @@ const SideBar = ({ children }) => {
               if (route.subRoutes) {
                 return (
                   <SidebarMenu
-                    setIsOpen={setIsOpen}
+                    // setIsOpen={setIsOpen}
                     route={route}
                     showAnimation={showAnimation}
                     isOpen={isOpen}
