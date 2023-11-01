@@ -3,19 +3,21 @@ import "./header.css";
 import { FaBars, FaUser } from "react-icons/fa";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { BiLogOutCircle } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 // import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
   const navigate = useNavigate();
   const [userToggle, setUserToggle] = useState(false);
-  const handleUserToggle = () => setUserToggle(!userToggle);
-//   const { isOpen } = useSelector((state) => state.sidebar);
-//   const dispatch = useDispatch();
-//   const toggle = () =>
-//     dispatch({
-//       type: "setIsOpen",
-//       payload: !isOpen,
-//     });
+   const handleUserToggle = () => setUserToggle(!userToggle);
+  const { isOpen } = useSelector((state) => state.sidebar);
+  const dispatch = useDispatch();
+  const toggle = () =>
+    dispatch({
+      type: "setIsOpen",
+      payload: !isOpen,
+    });
 
 
   const handleLogout = () => {
@@ -30,7 +32,7 @@ const Header = () => {
         <div className="header_wrapper">
           <div>
             <div className="bars">
-              <FaBars />
+              <FaBars onClick={toggle}/>
             </div>
           </div>
           <div>
