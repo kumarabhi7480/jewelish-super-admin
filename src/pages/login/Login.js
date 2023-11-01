@@ -50,7 +50,7 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess) {
       // toast.success("Logdin Successfully");
-      alert("Successfully logdin");
+      // alert("Successfully logdin");
       navigate("/");
     }
   }, [isSuccess]);
@@ -125,7 +125,7 @@ const Login = () => {
                   SIGN IN
                 </Button>
                 <NavLink
-                  to="#"
+                  to="/password/forgot"
                   style={{
                     display: "block",
                     textAlign: "right",
