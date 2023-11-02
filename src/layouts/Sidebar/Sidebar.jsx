@@ -1,16 +1,24 @@
 import { NavLink } from "react-router-dom";
-import { FaBars, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
+import {
+  FaHome,
+  FaLock,
+  FaMoneyBill,
+  FaSellcast,
+  FaUser,
+} from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
 import { BiAnalyse, BiRadioCircleMarked, BiSearch } from "react-icons/bi";
 import { BiCog } from "react-icons/bi";
 import { AiFillHeart, AiTwotoneFileExclamation } from "react-icons/ai";
-import { BsCartCheck, BsCartFill } from "react-icons/bs";
-import { useState } from "react";
+import { BsCartCheck, BsCartFill, BsFillCartPlusFill } from "react-icons/bs";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { GiDiamondHard, GiStrikingDiamonds } from "react-icons/gi";
 import SidebarMenu from "./SidebarMenu";
 import "./sideBar.css";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { Redeem } from "@mui/icons-material";
 const routes = [
   {
     path: "/",
@@ -22,6 +30,11 @@ const routes = [
     name: "Products",
     icon: <BsCartFill />,
     subRoutes: [
+      // {
+      //   path: "/product/new",
+      //   name: "New Product",
+      //   icon: <BsFillCartPlusFill />,
+      // },
       {
         path: "/products/all",
         name: "All Products",
@@ -57,45 +70,60 @@ const routes = [
         name: "Designs",
         icon: <BiRadioCircleMarked />,
       },
-
-      // {
-      //   path: "/settings/profile",
-      //   name: "Profile ",
-      //   icon: <FaUser />,
-      // },
-      // {
-      //   path: "/settings/2fa",
-      //   name: "2FA",
-      //   icon: <FaLock />,
-      // },
-      // {
-      //   path: "/settings/billing",
-      //   name: "Billing",
-      //   icon: <FaMoneyBill />,
-      // },
     ],
   },
   {
-    path: "/users",
-    name: "Users",
+    path: "/customers",
+    name: "Customers",
     icon: <FaUser />,
   },
   {
-    path: "/messages",
-    name: "Messages",
-    icon: <MdMessage />,
+    path: "/coupons",
+    name: "Coupons",
+    icon: <Redeem />,
   },
   {
-    path: "/analytics",
-    name: "Analytics",
-    icon: <BiAnalyse />,
+    path: "/sellers",
+    name: "Sellers",
+    icon: <FaSellcast />,
   },
-
-  {
-    path: "/order",
-    name: "Order",
-    icon: <BsCartCheck />,
-  },
+  // {
+  //   path: "/messages",
+  //   name: "Messages",
+  //   icon: <MdMessage />,
+  // },
+  // {
+  //   path: "/analytics",
+  //   name: "Analytics",
+  //   icon: <BiAnalyse />,
+  // },
+  // {
+  //   path: "/file-manager",
+  //   name: "File Manager",
+  //   icon: <AiTwotoneFileExclamation />,
+  //   subRoutes: [
+  //     {
+  //       path: "/settings/profile",
+  //       name: "Profile ",
+  //       icon: <FaUser />,
+  //     },
+  //     {
+  //       path: "/settings/2fa",
+  //       name: "2FA",
+  //       icon: <FaLock />,
+  //     },
+  //     {
+  //       path: "/settings/billing",
+  //       name: "Billing",
+  //       icon: <FaMoneyBill />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: "/order",
+  //   name: "Order",
+  //   icon: <BsCartCheck />,
+  // },
   {
     path: "/settings",
     name: "Settings",
@@ -107,141 +135,139 @@ const routes = [
         name: "Profile ",
         icon: <FaUser />,
       },
-      {
-        path: "/settings/2fa",
-        name: "2FA",
-        icon: <FaLock />,
-      },
-      {
-        path: "/settings/billing",
-        name: "Billing",
-        icon: <FaMoneyBill />,
-      },
     ],
   },
-  {
-    path: "/saved",
-    name: "Saved",
-    icon: <AiFillHeart />,
-  },
+  // {
+  //   path: "/saved",
+  //   name: "Saved",
+  //   icon: <AiFillHeart />,
+  // },
 ];
+const inputAnimation = {
+  hidden: {
+    width: 0,
+    padding: 0,
+    transition: {
+      duration: 0.2,
+    },
+  },
+  show: {
+    width: "140px",
+    padding: "5px 15px",
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
+
+const showAnimation = {
+  hidden: {
+    width: 0,
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+  show: {
+    opacity: 1,
+    width: "auto",
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
 
 const SideBar = ({ children }) => {
-  const dispatch = useDispatch()
-  const {isOpen} = useSelector((state)=>state.sidebar)
-  // const [isOpen, setIsOpen] = useState(false);
-  // const toggle = () => setIsOpen(!isOpen);
-  const inputAnimation = {
-    hidden: {
-      width: 0,
-      padding: 0,
-      transition: {
-        duration: 0.2,
-      },
-    },
-    show: {
-      width: "140px",
-      padding: "5px 15px",
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
+  const dispatch = useDispatch();
+  const { isOpen } = useSelector((state) => state.sidebar);
+  const [hiddenSidebarWidth, setHiddenSidebarWidth] = useState(0);
 
-  const showAnimation = {
-    hidden: {
-      width: 0,
-      opacity: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-    show: {
-      opacity: 1,
-      width: "auto",
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 991) setHiddenSidebarWidth(45);
+      else setHiddenSidebarWidth(0);
+    };
 
+    // Attach the event listener
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <>
-      <div className="main-container">
-        <motion.div
-          animate={{
-            width: isOpen ? "200px" : "45px",
+      <motion.div
+        animate={{
+          width: isOpen ? "200px" : `${hiddenSidebarWidth}px`,
 
-            transition: {
-              duration: 0.5,
-              type: "spring",
-              damping: 10,
-            },
-          }}
-          className={`sidebar `}
-        >
-          <div className="top_section">
-            <AnimatePresence>
-              {isOpen && (
-                <motion.h1
-                  variants={showAnimation}
-                  initial="hidden"
-                  animate="show"
-                  exit="hidden"
-                  className="logo"
-                >
-                  DoSomeCoding
-                </motion.h1>
-              )}
-            </AnimatePresence>
-
-            <div className="bars">
-              {/* <FaBars onClick={toggle} /> */}
-              {/* <FaBars onClick={toggle} /> */}
-            </div>
-          </div>
-          <div className="search">
-            <div className="search_icon">
-              <BiSearch   onClick={() =>
+          transition: {
+            duration: 0.5,
+            type: "spring",
+            damping: 10,
+          },
+        }}
+        className={`sidebar `}
+      >
+        <div className="top_section">
+          <AnimatePresence>
+            {isOpen && (
+              <motion.h1
+                variants={showAnimation}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                className="logo"
+              >
+                Jewellish's Admin
+              </motion.h1>
+            )}
+          </AnimatePresence>
+        </div>
+        <div className="search">
+          <div className="search_icon">
+            <BiSearch
+              onClick={() =>
                 dispatch({
                   type: "setIsOpen",
                   payload: true,
                 })
-              } />
-            </div>
-            <AnimatePresence>
-              {isOpen && (
-                <motion.input
-                  initial="hidden"
-                  animate="show"
-                  exit="hidden"
-                  variants={inputAnimation}
-                  type="text"
-                  placeholder="Search"
-                />
-              )}
-            </AnimatePresence>
-          </div>
-          <section className="routes">
-            {routes.map((route, index) => {
-              if (route.subRoutes) {
-                return (
-                  <SidebarMenu
-                    // setIsOpen={setIsOpen}
-                    route={route}
-                    showAnimation={showAnimation}
-                    isOpen={isOpen}
-                    key={index}
-                  />
-                );
               }
-
+            />
+          </div>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.input
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                variants={inputAnimation}
+                type="text"
+                placeholder="Search"
+              />
+            )}
+          </AnimatePresence>
+        </div>
+        <section className="routes">
+          {routes.map((route, index) => {
+            if (route.subRoutes) {
               return (
+                <SidebarMenu
+                  route={route}
+                  key={index}
+                  showAnimation={showAnimation}
+                />
+              );
+            }
+
+            return (
+              <div key={index} className="side_Bar">
                 <NavLink
                   to={route.path}
-                  key={index}
                   className="link"
-                  // activeClassName="active"
+                  activeclassname="active"
                 >
                   <div className="icon">{route.icon}</div>
                   <AnimatePresence>
@@ -258,13 +284,11 @@ const SideBar = ({ children }) => {
                     )}
                   </AnimatePresence>
                 </NavLink>
-              );
-            })}
-          </section>
-        </motion.div>
-
-        <main>{children}</main>
-      </div>
+              </div>
+            );
+          })}
+        </section>
+      </motion.div>
     </>
   );
 };
