@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import { FaAngleDown } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 const menuAnimation = {
@@ -35,11 +37,16 @@ const menuItemAnimation = {
   }),
 };
 
-const SidebarMenu = ({ route, showAnimation, isOpen, setIsOpen }) => {
+const SidebarMenu = ({ route, showAnimation}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+const {isOpen} = useSelector((state)=>state.sidebar);
+const dispatch = useDispatch();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    setIsOpen(true);
+      dispatch({
+        type: "setIsOpen",
+        payload: true,
+      })
   };
 
   useEffect(() => {
