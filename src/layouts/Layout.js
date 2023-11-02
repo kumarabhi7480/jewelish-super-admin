@@ -3,17 +3,19 @@ import Header from "./Header/Header";
 // import { useDispatch, useSelector } from "react-redux";
 import "./layout.css";
 import { Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 // import Loading from "../Components/loading/loading";
 
 const Layout = () => {
-//   const dispatch = useDispatch();
-//   const { isOpen } = useSelector((state) => state.sidebar);
-//   const handleClickOutside = () => {
-//     dispatch({
-//       type: "setIsOpen",
-//       payload: false,
-//     });
-//   };
+  const dispatch = useDispatch();
+  const { isOpen } = useSelector((state) => state.sidebar);
+  const handleClickOutside = () => {
+    dispatch({
+      type: "setIsOpen",
+      payload: false,
+    });
+  };
 
   return (
     <>
@@ -25,10 +27,10 @@ const Layout = () => {
             <Outlet />{" "}
           </main>
         </div>
-        {/* <div
+        <div
           onClick={handleClickOutside}
           className={`overlay ${isOpen ? "show" : ""}`}
-        ></div> */}
+        ></div>
       </div>
     </>
   );
